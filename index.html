@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Fuluka</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
+            color: #e0e0ff;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            padding: 20px;
+        }
+        #login-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 5, 0.95);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; transition: opacity 0.8s ease;
+        }
+        .login-box {
+            background: rgba(20, 20, 40, 0.6); padding: 40px; border-radius: 16px;
+            border: 1px solid #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+            text-align: center; max-width: 450px; width: 100%;
+        }
+        .login-box h2 { margin-bottom: 25px; font-weight: 300; letter-spacing: 3px; color: #60a5fa; font-size: 20px; }
+        .login-box input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #1e3a8a;
+            background: #0f172a; color: #fff; font-size: 16px; text-align: center; margin-bottom: 20px; outline: none;
+        }
+        .login-box button {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); color: white;
+            border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;
+        }
+        header { text-align: center; margin-top: 10px; }
+        header h1 { font-size: 24px; font-weight: 300; letter-spacing: 4px; color: #93c5fd; }
+        .avatar-container { position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; }
+        .transcendental-light {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.1) 40%, transparent 70%);
+            border-radius: 50%; animation: pulseLight 4s infinite ease-in-out;
+        }
+        .quantum-glow {
+            position: absolute; width: 85%; height: 85%; border-radius: 50%;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.3), inset 0 0 40px rgba(6, 182, 212, 0.2);
+            animation: rotateGlow 8s infinite linear;
+        }
+        .indefinite-face {
+            position: relative; width: 140px; height: 190px;
+            background: radial-gradient(ellipse at center, rgba(10, 10, 26, 0.9) 30%, rgba(25, 20, 50, 0.4) 70%, transparent 100%);
+            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%; filter: blur(8px);
+        }
+        .avatar-container.speaking .transcendental-light {
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.4) 0%, rgba(99, 102, 241, 0.2) 50%, transparent 70%);
+            animation: pulseSpeaking 0.5s infinite alternate ease-in-out;
+        }
+        .display-panel {
+            width: 100%; max-width: 600px; background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; height: 150px; overflow-y: auto; margin-bottom: 20px;
+        }
+        .text-line { margin-bottom: 10px; line-height: 1.5; font-size: 15px; }
+        .text-line.assistant { color: #a5b4fc; }
+        .text-line.user { color: #38bdf8; text-align: right; }
+        .controls-panel {
+            width: 100%; max-width: 600px; display: flex; gap: 10px; align-items: center;
+            background: rgba(30, 41, 59, 0.4); padding: 15px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-box { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; padding: 5px 10px; }
+        .btn-action { background: #2563eb; color: #fff; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-mic { background: #7c3aed; }
+        .btn-mic.active { background: #ef4444; animation: pulseMic 1.5s infinite; }
+        @keyframes pulseLight { 0%, 100% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } }
+        @keyframes rotateGlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseSpeaking { 0% { transform: scale(0.98); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
+        @keyframes pulseMic { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+    </style>
+</head>
+<body>
+
+    <div id="login-container">
+        <div class="login-box">
+            <h2>IDENTIFIQUE-SE, POR FAVOR</h2>
+            <input type="password" id="password-input" placeholder="Senha de acesso quântico">
+            <button onclick="verificarAcesso()">Acessar Sistema</button>
+        </div>
+    </div>
+
+    <header><h1>PROJETO FULUKA</h1></header>
+
+    <div class="avatar-container" id="avatar">
+        <div class="transcendental-light"></div>
+        <div class="quantum-glow"></div>
+        <div class="indefinite-face"></div>
+    </div>
+
+    <div class="display-panel" id="chat-display"></div>
+
+    <div class="controls-panel">
+        <input type="text" class="input-box" id="text-input" placeholder="Fale com a Fuluka..." onkeypress="checarEnter(event)">
+        <button class="btn-action btn-mic" id="mic-button" onclick="alternarVozAutomatica()">🎤</button>
+        <button class="btn-action" onclick="enviarTexto()">➔</button>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // COLOQUE SUA CHAVE DA API DO GEMINI AQUI
+        const API_KEY = "AQ.Ab8RN6IOPZCABsavbq-tgldFuxpnnC7NynrW0ooCS0plmh9yFw"; 
+        const genAI = new GoogleGenerativeAI(API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        // Configuração do histórico do chat
+        const chat = model.startChat({
+            history: [
+                {
+                    role: "user",
+                    parts: [{ text: "Você é a Fuluka, uma inteligência artificial avançada com uma personalidade futurista, prestativa e misteriosa. Suas respostas devem ser diretas, claras e sem usar caracteres especiais como asteriscos ou formatações complexas." }],
+                }
+            ],
+        });
+
+        // Configurações de Reconhecimento de Voz (Microfone)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let escutando = false;
+
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onstart = () => {
+                escutando = true;
+                document.getElementById('mic-button').classList.add('active');
+                document.getElementById('text-input').placeholder = "Ouvindo...";
+            };
+
+            recognition.onresult = (event) => {
+                const textoCapturado = event.results[0][0].transcript;
+                document.getElementById('text-input').value = textoCapturado;
+                enviarTexto();
+            };
+
+            recognition.onerror = (event) => {
+                console.error("Erro no microfone: ", event.error);
+                pararReconhecimento();
+            };
+
+            recognition.onend = () => {
+                pararReconhecimento();
+            };
+        } else {
+            console.warn("Reconhecimento de voz não suportado neste navegador.");
+            document.getElementById('mic-button').style.display = 'none';
+        }
+
+        function pararReconhecimento() {
+            escutando = false;
+            document.getElementById('mic-button').classList.remove('active');
+            document.getElementById('text-input').placeholder = "Fale com a Fuluka...";
+        }
+
+        // Função para ativar/desativar o microfone ao clicar no botão
+        window.alternarVozAutomatica = function() {
+            if (!recognition) return;
+            if (escutando) {
+                recognition.stop();
+            } else {
+                window.speechSynthesis.cancel(); // Para a fala se ela estiver falando
+                document.getElementById('avatar').classList.remove('speaking');
+                recognition.start();
+            }
+        }
+
+        // Função para enviar o texto (seja digitado ou por voz)
+        window.enviarTexto = async function() {
+            const input = document.getElementById('text-input');
+            const mensagem = input.value.trim();
+            if (!mensagem) return;
+
+            adicionarMensagemAoChat(mensagem, 'user');
+            input.value = "";
+
+            try {
+                // Envia para o Gemini
+                const resultado = await chat.sendMessage(mensagem);
+                const respostaTexto = resultado.response.text();
+                
+                adicionarMensagemAoChat(respostaTexto, 'assistant');
+                falar(respostaTexto);
+            } catch (erro) {
+                console.error(erro);
+                adicionarMensagemAoChat("Erro ao conectar com a matriz quântica.", 'assistant');
+            }
+        }
+
+        // Adiciona os blocos de texto no painel visual
+        function adicionarMensagemAoChat(texto, remetente) {
+            const painel = document.getElementById('chat-display');
+            const linha = document.createElement('div');
+            linha.classList.add('text-line', remetente);
+            linha.innerText = texto;
+            painel.appendChild(linha);
+            painel.scrollTop = painel.scrollHeight;
+        }
+
+        // Função de Sintese de Voz (Fazer a Fuluka falar)
+        function falar(texto) {
+            // Remove caracteres especiais para a leitura ficar limpa
+            const textoLimpo = texto.replace(/[\*\_#]/g, '');
+            
+            window.speechSynthesis.cancel(); // Para qualquer fala anterior
+            const enunciado = new SpeechSynthesisUtterance(textoLimpo);
+            enunciado.lang = 'pt-BR';
+
+            const avatar = document.getElementById('avatar');
+
+            enunciado.onstart = () => {
+                avatar.classList.add('speaking'); // Inicia a animação do rosto
+            };
+
+            enunciado.onend = () => {
+                avatar.classList.remove('speaking'); // Para a animação
+            };
+
+            enunciado.onerror = () => {
+                avatar.classList.remove('speaking');
+            };
+
+            window.speechSynthesis.speak(enunciado);
+        }
+
+        // Atalho para enviar com a tecla Enter
+        window.checarEnter = function(event) {
+            if (event.key === 'Enter') {
+                enviarTexto();
+            }
+        }
+
+        // Função temporária de login da tela inicial
+        window.verificarAcesso = function() {
+            // Adicione sua lógica de validação se necessário. Por enquanto, libera direto:
+            document.getElementById('login-container').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('login-container').style.display = 'none';
+            }, 800);
+        }
+    </script>
+</body>
+</html>
