@@ -1,343 +1,250 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROJETO FULUKA</title>
+    <title>Projeto Fuluka</title>
     <style>
-        /* CSS ORIGINAL DO SEU DESIGN (Fundo e Telas) */
-        * {
-            box-sizing: border-box;
+        body {
             margin: 0;
             padding: 0;
-            font-family: sans-serif;
-        }
-
-        body {
-            background-color: #070913;
+            background-color: #0d1117;
             color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* Container que simula a tela do celular do seu print */
-        .phone-screen {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            max-width: 450px;
-            max-height: 850px;
-            background-color: #070913;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             overflow: hidden;
         }
 
-        /* 1. TELA DE LOGIN (PROTEÇÃO GITHUB) */
+        /* Tela de Autenticação (Senha) */
         #tela-login {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.95);
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            height: 100%;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .login-box {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
             text-align: center;
-            z-index: 10;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        #tela-login h3 {
-            font-size: 1.1rem;
-            color: #ffffff;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-            opacity: 0.8;
-        }
-
-        .input-login {
-            width: 85%;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            color: #ffffff;
-            font-size: 1rem;
-            margin-bottom: 18px;
-            outline: none;
+        .login-box input {
+            width: 80%;
+            padding: 10px;
+            margin: 15px 0;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: #fff;
+            border-radius: 5px;
             text-align: center;
-            backdrop-filter: blur(5px);
         }
 
-        .input-login:focus {
-            border-color: #4a54a4;
-        }
-
-        .botao-login {
-            width: 85%;
-            padding: 14px;
-            background: linear-gradient(90deg, #1e295d, #4a54a4);
-            border: none;
-            border-radius: 30px;
+        .login-box button {
+            padding: 10px 20px;
+            background: #238636;
             color: white;
-            font-weight: bold;
-            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
         }
 
-
-        /* 2. TELA DO CHAT (FULUKA ORIGINAL) */
-        #tela-chat {
-            display: none; /* Só aparece após validar a chave */
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
-        }
-
-        /* Topo do print */
-        .header-titulo {
+        /* Aplicativo Secreto */
+        #conteudo-app {
+            display: none;
             text-align: center;
-            font-size: 1.4rem;
-            letter-spacing: 3px;
-            font-weight: 300;
-            color: #ffffff;
-            margin-top: 20px;
-            margin-bottom: 40px;
-            text-transform: uppercase;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* O ROSTO DA FULUKA (Interface do seu print) */
-        .rosto-container {
+        .avatar-container {
+            width: 200px;
+            height: 200px;
             position: relative;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin-bottom: 20px;
         }
 
-        /* A Grande Órbita com degradê roxo/azul borrado ao fundo */
-        .grande-orbita {
-            position: absolute;
-            width: 280px;
-            height: 280px;
+        .rosto {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1f6feb 0%, #0d1117 70%);
+            border: 2px solid #58a6ff;
             border-radius: 50%;
-            background: transparent;
-            box-shadow: 0 0 60px 20px rgba(74, 84, 164, 0.2), 
-                        inset 0 0 50px rgba(138, 43, 226, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
         }
 
-        /* Esfera menor flutuante metálica do canto inferior direito */
-        .esfera-fala {
+        .olhos {
             position: absolute;
-            right: 15%;
+            top: 35%;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 30px;
+            box-sizing: border-box;
+        }
+
+        .olho {
+            width: 20px;
+            height: 20px;
+            background: #58a6ff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #58a6ff;
+        }
+
+        .boca {
+            position: absolute;
             bottom: 25%;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #ffffff 0%, #a4b3d6 30%, #28355c 70%, #0c1224 100%);
-            box-shadow: -4px -4px 12px rgba(255,255,255,0.1) inset, 
-                        4px 4px 15px rgba(0,0,0,0.6),
-                        0 0 20px rgba(164, 179, 214, 0.2);
-            animation: flutuar 4s ease-in-out infinite;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 10px;
+            background: #58a6ff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #58a6ff;
+            transition: all 0.1s ease;
         }
 
-        @keyframes flutuar {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .falando {
+            animation: mexerBoca 0.2s infinite alternate;
         }
 
-        /* O BALÃO DE MENSAGEM (Idêntico ao seu print) */
-        .balao-container {
-            width: 100%;
-            padding: 0 10px;
-            margin-bottom: 25px;
+        @keyframes mexerBoca {
+            0% { height: 5px; width: 50px; }
+            100% { height: 40px; width: 45px; border-radius: 50%; }
         }
 
-        .balao-mensagem {
-            background-color: #0b1224;
-            border: 1px solid #141f38;
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-size: 1.05rem;
-            line-height: 1.5;
-            color: #abbacc;
-            position: relative;
-        }
-
-        /* Nome de saudação destacado dentro do balão */
-        .saudacao-nome {
-            color: #ffffff;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        /* RODAPÉ: Barra de Entrada (Estilo do seu print) */
-        .rodape-input {
-            width: 100%;
+        /* Campo de texto para conversar com o Gemini */
+        .chat-container {
+            margin-top: 20px;
             display: flex;
-            align-items: center;
-            background-color: #0d152a;
-            border: 1px solid #18254b;
-            border-radius: 30px;
-            padding: 5px 10px 5px 20px;
-            margin-bottom: 15px;
+            gap: 10px;
         }
 
-        .rodape-input input {
-            flex: 1;
-            background: transparent;
+        .chat-container input {
+            padding: 10px;
+            width: 250px;
+            background: #161b22;
+            border: 1px solid #30363d;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .chat-container button {
+            padding: 10px;
+            background: #1f6feb;
+            color: white;
             border: none;
-            outline: none;
-            color: #ffffff;
-            font-size: 1.05rem;
-            padding: 12px 0;
-        }
-
-        .rodape-input input::placeholder {
-            color: #42527a;
-        }
-
-        .rodape-input button {
-            background: linear-gradient(135deg, #2b56af, #182e63);
-            border: none;
-            color: #ffffff;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            border-radius: 5px;
             cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        .rodape-input button:active {
-            opacity: 0.8;
         }
     </style>
 </head>
 <body>
 
-    <div class="phone-screen">
-        
-        <!-- 1. TELA DE LOGIN (Camada de proteção para o GitHub) -->
-        <div id="tela-login">
-            <h3>PROJETO FULUKA<br><span style="font-size:0.75rem; color:#42527a;">Autenticação Matriz</span></h3>
-            <input type="password" id="chave-api" class="input-login" placeholder="Digite a chave secreta...">
-            <button onclick="conectarSistema()" class="botao-login">Conectar</button>
+    <!-- TELA DE LOGIN SEGURA -->
+    <div id="tela-login">
+        <div class="login-box">
+            <h2>Interface Fuluka</h2>
+            <p>Insira sua API Key do Gemini para iniciar:</p>
+            <input type="password" id="chave-input" placeholder="AIzaSy...">
+            <br>
+            <button onclick="autenticar()">Entrar no Sistema</button>
         </div>
+    </div>
 
-        <!-- 2. TELA DO CHAT (O seu Design Intocado) -->
-        <div id="tela-chat">
-            
-            <!-- Título do topo do print -->
-            <h1 class="header-titulo">PROJETO FULUKA</h1>
-
-            <!-- O Rosto original (A órbita e a esfera do canto) -->
-            <div class="rosto-container">
-                <div class="grande-orbita"></div>
-                <div class="esfera-fala"></div>
-            </div>
-
-            <!-- Balão de Texto do print -->
-            <div class="balao-container">
-                <div class="balao-mensagem" id="caixa-texto">
-                    <span class="saudacao-nome" id="autor-mensagem">Ola</span>
-                    <span id="conteudo-mensagem">Erro ao conectar com a matriz quântica.</span>
+    <!-- CONTEÚDO DO APLICATIVO -->
+    <div id="conteudo-app">
+        <div class="avatar-container">
+            <div class="rosto">
+                <div class="olhos">
+                    <div class="olho"></div>
+                    <div class="olho"></div>
                 </div>
+                <div id="boca-avatar" class="boca"></div>
             </div>
-
-            <!-- Entrada de dados inferior -->
-            <div class="rodape-input">
-                <input type="text" id="mensagem-usuario" placeholder="Fale com a Fuluka..." onkeydown="verificarTecla(event)">
-                <button onclick="enviarMensagem()">➔</button>
-            </div>
-
         </div>
-
+        <h2 id="status">Fuluka Prontificado</h2>
+        
+        <div class="chat-container">
+            <input type="text" id="user-input" placeholder="Pergunte algo para a IA...">
+            <button onclick="conversarComGemini()">Enviar</button>
+        </div>
     </div>
 
     <script>
-        // Memória volátil: Limpa toda vez que fecha a página. Protegido contra o GitHub.
-        let apiKey = "";
+        let CHAVE_API = "";
 
-        // Desbloqueia a interface se digitar qualquer valor
-        function conectarSistema() {
-            const campoChave = document.getElementById("chave-api").value.trim();
-
-            if (campoChave === "") {
-                alert("Acesso negado. Insira a chave da matriz.");
+        function autenticar() {
+            const input = document.getElementById('chave-input').value.trim();
+            if (input === "") {
+                alert("Por favor, insira a chave do Gemini.");
                 return;
             }
-
-            apiKey = campoChave;
-
-            // Restaura o texto padrão inicial do seu print na interface antes de liberar
-            document.getElementById("autor-mensagem").textContent = "Fuluka";
-            document.getElementById("conteudo-mensagem").textContent = "Conexão com a matriz quântica estabelecida. Sistema pronto.";
-
-            // Altera as telas exibindo seu design
-            document.getElementById("tela-login").style.display = "none";
-            document.getElementById("tela-chat").style.display = "flex";
+            CHAVE_API = input;
+            document.getElementById('tela-login').style.display = 'none';
+            document.getElementById('conteudo-app').style.display = 'flex';
         }
 
-        function verificarTecla(event) {
-            if (event.key === "Enter") {
-                enviarMensagem();
-            }
-        }
+        // COMUNICAÇÃO REAL COM O GEMINI
+        async function conversarComGemini() {
+            const inputField = document.getElementById('user-input');
+            const textoUsuario = inputField.value.trim();
+            const boca = document.getElementById('boca-avatar');
+            const status = document.getElementById('status');
 
-        // Faz o envio para a API oficial do Gemini usando a variável temporária
-        async function enviarMensagem() {
-            const input = document.getElementById("mensagem-usuario");
-            const texto = input.value.trim();
-            const autorEl = document.getElementById("autor-mensagem");
-            const conteudoEl = document.getElementById("conteudo-mensagem");
+            if (!textoUsuario) return;
 
-            if (texto === "") return;
+            status.innerText = "Pensando...";
+            inputField.value = ""; 
 
-            // Altera o balão mostrando que a IA está pensando
-            autorEl.textContent = "Fuluka";
-            conteudoEl.textContent = "Processando fluxos quânticos...";
-            input.value = "";
-
-            // URL oficial com o modelo estável gemini-1.5-flash
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-            const payload = {
-                contents: [{
-                    parts: [{ text: texto }]
-                }]
-            };
+            // Link oficial para comunicação com o modelo Gemini 1.5 Flash
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CHAVE_API}`;
 
             try {
                 const response = await fetch(url, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: textoUsuario }] }]
+                    })
                 });
 
-                if (!response.ok) throw new Error();
-
                 const data = await response.json();
+                
+                // Pega o texto que a IA respondeu
                 const respostaIA = data.candidates[0].content.parts[0].text;
+                
+                console.log("Gemini respondeu:", respostaIA);
+                status.innerText = respostaIA;
 
-                // Entrega a resposta final no balão original do seu layout
-                conteudoEl.textContent = respostaIA;
+                // Ativa a animação do rosto falando
+                boca.classList.add('falando');
+
+                // O rosto mexe por um tempo proporcional ao tamanho da resposta
+                const tempoFala = Math.min(Math.max(respostaIA.length * 50, 2000), 7000); 
+                setTimeout(() => {
+                    boca.classList.remove('falando');
+                }, tempoFala);
 
             } catch (error) {
-                autorEl.textContent = "Sistema";
-                conteudoEl.textContent = "Erro ao conectar com a matriz quântica. Verifique sua chave de acesso.";
+                console.error("Erro na API:", error);
+                status.innerText = "Erro ao conectar com o Gemini. Verifique sua chave.";
             }
         }
     </script>
