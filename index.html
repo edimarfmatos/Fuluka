@@ -270,12 +270,13 @@
         }
 
         function autenticar() {
+            // .trim() remove espaços invisíveis colados por engano nas pontas da senha
             const input = document.getElementById('chave-input').value.trim();
             if (!input) {
                 alert("Por favor, forneça uma chave.");
                 return;
             }
-            CHAVE_API = input; // Aceita qualquer sequência de texto inserida
+            CHAVE_API = input; 
             document.getElementById('tela-login').style.display = 'none';
             document.getElementById('conteudo-app').style.display = 'flex';
         }
@@ -305,6 +306,7 @@
             if (e.key === 'Enter') enviarMensagem();
         }
 
+        // COMUNICAÇÃO ATUALIZADA INTERNA
         async function enviarMensagem() {
             const inputField = document.getElementById('user-input');
             const textoUsuario = inputField.value.trim();
@@ -316,31 +318,49 @@
             status.innerText = "Processando reflexão...";
             inputField.value = "";
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CHAVE_API}`;
+            // ROTA CORRIGIDA v1
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${CHAVE_API}`;
 
             try {
                 const response = await fetch(url, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: textoUsuario }] }] })
+                    headers: { 
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        contents: [{ 
+                            parts: [{ text: textoUsuario }] 
+                        }] 
+                    })
                 });
 
+                // Se o Google recusar a comunicação interna, captura o erro detalhado
+                if (!response.ok) {
+                    const dadosErro = await response.json();
+                    console.error("Erro retornado pelo Gemini:", dadosErro);
+                    status.innerText = `Falha na comunicação: ${dadosErro.error.message} (Código ${dadosErro.error.code})`;
+                    return;
+                }
+
                 const data = await response.json();
-                const respostaIA = data.candidates[0].content.parts[0].text;
                 
-                status.innerText = respostaIA;
-                falarRespostaTexto(respostaIA);
+                if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+                    const respostaIA = data.candidates[0].content.parts[0].text;
+                    
+                    status.innerText = respostaIA;
+                    falarRespostaTexto(respostaIA); 
+                } else {
+                    status.innerText = "Recebi uma resposta em formato inesperado.";
+                }
 
             } catch (error) {
-                console.error(error);
-                status.innerText = "Erro ao conectar. Verifique sua chave de acesso.";
+                console.error("Erro crítico na rede:", error);
+                status.innerText = "Não foi possível enviar a mensagem. Verifique a conexão do aplicativo.";
             }
         }
 
-        // Função para o sistema falar de volta por áudio (ouvir a IA)
         function falarRespostaTexto(texto) {
             if ('speechSynthesis' in window) {
-                // Remove caracteres especiais do texto para a leitura ficar limpa
                 const textoLimpo = texto.replace(/[*#_]/g, '');
                 const utterance = new SpeechSynthesisUtterance(textoLimpo);
                 utterance.lang = 'pt-BR';
@@ -357,7 +377,6 @@
 
                 window.speechSynthesis.speak(utterance);
             } else {
-                // Se não suportar áudio de saída, apenas simula a pulsação de fala por tempo fixo
                 const orbe = document.getElementById('orbe-energia');
                 orbe.classList.add('falando');
                 setTimeout(() => orbe.classList.remove('falando'), 4000);
